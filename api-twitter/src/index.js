@@ -1,7 +1,7 @@
 // Recuperar instância do express
 const express = require('express')
 const cors = require('cors')
-const PORT = 3000
+const PORT = 3001
 
 // Criando uma Instância do Express
 const app = express()
