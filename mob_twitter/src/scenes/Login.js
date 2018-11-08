@@ -11,7 +11,7 @@ import {
  } from 'react-native'
  import { 
    StackActions,
-   NavigationAction
+   NavigationActions
  } from 'react-navigation'
 
  // Importação de recursos
@@ -41,7 +41,7 @@ class Login extends Component {
   navigateToTimeline = () => {
     const resetAction = StackActions.reset({
       index: 0,
-      actions: NavigationAction.navigate({ routeName: 'Timeline' })
+      actions: [ NavigationActions.navigate({ routeName: 'Timeline' }) ]
     })
     this.props.navigation.dispatch(resetAction)
   }

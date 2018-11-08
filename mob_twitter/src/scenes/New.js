@@ -1,15 +1,78 @@
 // Importação de Dependências
 import React, { Component } from 'react'
-import { StyleSheet, Text } from 'react-native'
+import { 
+  AsyncStorage,
+  SafeAreaView,
+  StyleSheet, 
+  Text,
+  TextInput,
+  TouchableOpacity,
+  View
+} from 'react-native'
+import { bindActionCreators } from 'redux'
+import { connect } from 'react-redux'
+
+ // Importação de recursos
+ import Icon from 'react-native-vector-icons/MaterialIcons'
+
+ // Importação de ações do componente
+import {
+  handleInputChange,
+  handleNewTweet
+} from '../actions/tweetActions'
 
 // Definição do componente
-class New extends Component {
+class NewComponent extends Component {
+  static navigationOptions = {
+    header: null
+  }
+  goBack = () => {
+    this.props.navigation.pop()
+  }
+  handleTweet = async () => {
+    const { newTweet } = this.props //State
+    const { handleNewTweet } = this.props //Action
+    const tweet = {
+      author: await AsyncStorage.getItem('@GoTwitter:username'),
+      content: newTweet
+    }
+    handleNewTweet(tweet)
+    this.goBack()
+  }
   render() {
+    const { newTweet } = this.props
+    const { handleInputChange } = this.props
     return(
-      <Text>New</Text>
+      <SafeAreaView style={ styles.container }>
+        <View style={ styles.header }>
+          <TouchableOpacity onPress={this.goBack}>
+            <Icon name='close' size={24} color='#4BB0EE'/>
+          </TouchableOpacity>
+          <TouchableOpacity style={ styles.button } onPress={this.handleTweet} >
+            <Text style={ styles.buttonText }>Tweetar</Text>
+          </TouchableOpacity>
+        </View>
+        <TextInput 
+          style={ styles.input }
+          multiline
+          placeholder='O que está acontecento?'
+          value={newTweet}
+          onChangeText={handleInputChange}
+          placeholderTextColor='#999'
+          returnKeyType='send'
+          onSubmitEditing={this.handleTweet} />
+      </SafeAreaView>
     )
   }
 }
+
+// Decoração do componente
+const mapStateToProps = state => ({newTweet: state.tweet.newTweet})
+const mapDispatchToProps = dispatch => bindActionCreators({
+    handleInputChange,
+    handleNewTweet
+}, dispatch)
+const New = connect(mapStateToProps, mapDispatchToProps)(NewComponent)
 
 // Exportação do Componente
 export { New }

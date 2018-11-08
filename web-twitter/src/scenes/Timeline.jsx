@@ -70,7 +70,6 @@ class TimeLineComponent extends Component {
 
         // Recuperando método de busca
         const { search } = this.props
-        search()
 
         // Atualização de novo tweet
         io.on('tweet', data => { search() })
